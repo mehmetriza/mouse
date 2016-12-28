@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8">
+    <title>Gizli Mouse Oyunu</title>
+    <link href="https://fonts.googleapis.com/css?family=Kalam:400,700&amp;subset=latin-ext" rel="stylesheet">
+    <link href="style.css" rel="stylesheet">
+	<link rel="stylesheet" href="modal/jquery.sweet-modal.min.css" />
+    <script src="jq.js"></script>
+	<script src="modal/jquery.sweet-modal.min.js"></script>
+    <script>
+        function rand(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+        $(function() {
+            var bulmaSayi = 0;
+            var bas = $("<div class='bas' >Buraya Bas</div>").css({
+                left: rand(50, $(window).width() - 150),
+                top: rand(50, $(window).height() - 150)
+            });
+            $("body").append(bas);
+            $(document).on("click", ".bas", function() {
+                $("*").css("cursor", "none");
+                $("html").addClass("kapali");
+                var hedef = $("<div class='hedef' ></div>").css({
+                    left: rand(50, $(window).width() - 100),
+                    top: rand(50, $(window).height() - 100)
+                });
+                $("body").append(hedef);
+                $(".bas").remove();
+                $(document).on("click", function(e) {
+                    if ($(e.target).hasClass("hedef")) {
+						$("*").css("cursor", "default");
+						$("html").removeClass("kapali");
+						$.sweetModal({
+							content: 'İşte Skorun: '+bulmaSayi,
+							icon: $.sweetModal.ICON_SUCCESS,
+							onClose:function(){ location.reload() }
+						});
+                    } else {
+                        bulmaSayi += 1;
+                        if (bulmaSayi % 7 == 0) {
+                            var nokta = $("<div class='nokta' ></div>").css({
+                                left: e.pageX,
+                                top: e.pageY
+                            });
+                            $("body").append(nokta);
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+</head>
+
+<body>
+    <div class="kapsa"></div>
+</body>
+
+</html>
